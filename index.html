@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buku Saku - Trip Dieng SMAN 45</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-dark: #047857;
+            --primary-light: #d1fae5;
+            --secondary: #0f172a;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
+            --white: #ffffff;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 15px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:not(.btn-nav)::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:not(.btn-nav):hover::after,
+        .nav-links a.active:not(.btn-nav)::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .btn-nav {
+            background: var(--primary);
+            color: var(--white) !important;
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+            border: 2px solid transparent;
+        }
+
+        .btn-nav:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: var(--primary);
+            z-index: 1001;
+        }
+
+        /* --- HERO SECTION & WEATHER --- */
+        #beranda {
+            height: 100vh;
+            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1920') center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            color: var(--white);
+            scroll-margin-top: 0;
+        }
+
+        .hero-tags {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hero-tag {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .weather-badge {
+            background: rgba(5, 150, 105, 0.8);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            max-width: 600px;
+            margin-bottom: 40px;
+            color: #cbd5e1;
+        }
+
+        /* --- SECTIONS --- */
+        section {
+            padding: 100px 5%;
+            scroll-margin-top: 70px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            color: var(--text-light);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- PLOTTING DATA SECTION (PENCARIAN) --- */
+        .search-container {
+            max-width: 650px;
+            margin: 0 auto 40px auto;
+            text-align: center;
+        }
+        
+        .search-input-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .search-input-wrapper i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 20px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 18px 20px 18px 55px;
+            font-size: 16px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            border-radius: 50px;
+            border: 2px solid #cbd5e1;
+            outline: none;
+            transition: var(--transition);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
+        }
+
+        #searchInput:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        .search-results {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .result-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 16px;
+            border-left: 5px solid var(--primary);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            text-align: left;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .plot-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 650px;
+            margin: 0 auto 60px auto;
+        }
+
+        .plot-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px 25px;
+            background: var(--white);
+            color: var(--secondary);
+            text-decoration: none;
+            border-radius: 16px;
+            font-weight: 700;
+            border: 1px solid #e2e8f0;
+            transition: var(--transition);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .plot-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* --- INFO PENTING (CHECKLIST & RULES) --- */
+        #info {
+            background-color: var(--secondary);
+            color: var(--white);
+        }
+        #info .section-header h2 { color: var(--white); }
+        #info .section-header p { color: #94a3b8; }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-box h3 {
+            font-size: 24px;
+            margin-bottom: 25px;
+            color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Form Checklist */
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+        .form-input::placeholder { color: #94a3b8; }
+        .form-input:focus { outline: none; border-color: var(--primary); }
+
+        /* Checklist Bawaan */
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .checklist-item:hover { background: rgba(0, 0, 0, 0.4); }
+        .checklist-item input[type="checkbox"] {
+            width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer;
+        }
+        .checklist-item i {
+            font-size: 24px;
+            color: #fbbf24; /* Yellow warning color */
+        }
+        .checklist-item span {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        /* Tata Tertib */
+        .rules-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .rules-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            font-size: 15px;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+        .rules-list i {
+            color: var(--primary);
+            font-size: 20px;
+            margin-top: 2px;
+        }
+
+        /* --- ARMADA SECTION --- */
+        .armada-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        .armada-img-wrapper {
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .armada-img-wrapper img {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+        }
+        .armada-content h3 {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        .specs-list {
+            list-style: none;
+            margin-top: 30px;
+        }
+        .specs-list li {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            transition: var(--transition);
+        }
+        .specs-list li:hover {
+            transform: translateX(10px);
+            border-left: 4px solid var(--primary);
+        }
+        .specs-list i {
+            font-size: 24px;
+            color: var(--primary);
+            width: 30px;
+            text-align: center;
+        }
+
+        /* --- DESTINASI SECTION --- */
+        #destinasi { background-color: var(--white); }
+        .destinasi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .card {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+        }
+        .card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .card:hover img { transform: scale(1.1); }
+        .card-content {
+            padding: 25px;
+            background: var(--white);
+            position: relative;
+            z-index: 2;
+        }
+        .card-content h4 {
+            font-size: 20px;
+            margin-bottom: 5px;
+            color: var(--secondary);
+        }
+        .card-content p { color: var(--text-light); font-size: 14px; }
+
+        /* --- RUNDOWN (INTERACTIVE TABS) --- */
+        .tabs-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        .tab-buttons {
+            display: flex;
+            background: var(--bg-light);
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 20px;
+            border: none;
+            background: none;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+        .tab-btn.active {
+            color: var(--primary);
+            background: var(--white);
+        }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; left: 0; right: 0;
+            height: 3px;
+            background: var(--primary);
+        }
+        .tab-content {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.5s ease;
+        }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .timeline {
+            list-style: none;
+            position: relative;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0; left: 35px;
+            width: 2px;
+            background: #e2e8f0;
+        }
+        .timeline li {
+            position: relative;
+            padding-left: 110px;
+            margin-bottom: 35px;
+        }
+        .timeline li:last-child { margin-bottom: 0; }
+        .time-badge {
+            position: absolute;
+            left: 0; top: 0;
+            background: var(--primary);
+            color: var(--white);
+            font-size: 15px;
+            font-weight: 800;
+            padding: 8px 18px;
+            border-radius: 30px;
+            z-index: 2;
+            border: 4px solid var(--white);
+            box-shadow: 0 4px 10px rgba(5, 150, 105, 0.2);
+            transform: translateY(-5px);
+        }
+        .timeline-desc {
+            background: var(--bg-light);
+            padding: 20px 25px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text-dark);
+        }
+        .timeline-desc strong {
+            display: inline-block;
+            font-size: 20px;
+            color: var(--secondary);
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        /* --- FASILITAS SECTION --- */
+        #fasilitas { background-color: var(--white); }
+        .fasilitas-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .box { padding: 40px; border-radius: 24px; }
+        .box-include {
+            background: var(--primary-light);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+        .box-exclude {
+            background: #fee2e2;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+        .box h3 {
+            font-size: 24px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .box-include h3 { color: var(--primary-dark); }
+        .box-exclude h3 { color: #991b1b; }
+        .check-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .box-exclude .check-list { grid-template-columns: 1fr; }
+        .check-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 15px;
+            color: var(--text-dark);
+        }
+        .check-list i.fa-check-circle { color: var(--primary); margin-top: 3px;}
+        .check-list i.fa-times-circle { color: #dc2626; margin-top: 3px;}
+
+        /* --- MODAL TABEL DATA --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal.show {
+            display: flex; opacity: 1;
+            align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background-color: var(--white);
+            padding: 30px; border-radius: 20px;
+            width: 90%; max-width: 600px;
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            max-height: 85vh; overflow-y: auto;
+        }
+        .modal.show .modal-content { transform: translateY(0); }
+        .close-modal {
+            position: absolute; right: 20px; top: 20px;
+            font-size: 24px; color: var(--text-light);
+            cursor: pointer; transition: color 0.3s;
+        }
+        .close-modal:hover { color: #dc2626; }
+        
+        .data-table {
+            width: 100%; border-collapse: collapse; margin-top: 20px;
+        }
+        .data-table th, .data-table td {
+            padding: 12px 15px; border-bottom: 1px solid #e2e8f0; text-align: left;
+        }
+        .data-table th {
+            background-color: var(--primary-light); color: var(--primary-dark);
+            font-weight: 700; position: sticky; top: 0; z-index: 10;
+        }
+        .data-table tbody tr:hover { background-color: #f8fafc; }
+
+        /* --- FLOATING WA BUTTON (KONTAK DARURAT) --- */
+        .wa-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+            z-index: 9999;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .wa-float i { font-size: 24px; }
+        .wa-float:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(37, 211, 102, 0.5);
+            color: white;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: var(--secondary);
+            color: var(--white);
+            text-align: center;
+            padding: 40px 20px 100px 20px; /* Extra padding bottom for WA button */
+        }
+
+        /* --- RESPONSIVE DESIGN & MOBILE MENU --- */
+        @media (max-width: 860px) {
+            .menu-toggle { display: block; }
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                justify-content: flex-start;
+                padding-top: 40px;
+                gap: 25px;
+                transition: right 0.4s ease-in-out;
+                box-shadow: -5px 10px 15px rgba(0,0,0,0.05);
+            }
+            .nav-links.nav-active { right: 0; }
+            .nav-links a { font-size: 18px; }
+            
+            .hero-title { font-size: 40px; }
+            .armada-grid, .fasilitas-grid, .info-grid, .checklist-grid, .plot-container { grid-template-columns: 1fr; }
+            .check-list { grid-template-columns: 1fr; }
+            
+            .tab-btn { padding: 15px 10px; font-size: 16px; }
+            .tab-content { padding: 30px 15px; }
+            .timeline::before { left: 20px; }
+            .timeline li { padding-left: 70px; margin-bottom: 30px; }
+            .time-badge { font-size: 13px; padding: 6px 12px; }
+            .timeline-desc { font-size: 14px; padding: 15px; }
+            .timeline-desc strong { font-size: 16px; }
+
+            .wa-float { bottom: 20px; right: 20px; padding: 10px 15px; font-size: 14px; }
+            .wa-float i { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="#beranda" class="logo">
+            <svg width="160" height="40" viewBox="0 0 180 50" xmlns="http://www.w3.org/2000/svg">
+                <!-- Elemen Gunung -->
+                <path d="M25 10 L40 40 L10 40 Z" fill="#059669" />
+                <path d="M40 20 L55 40 L25 40 Z" fill="#10b981" />
+                <!-- Teks Logo -->
+                <text x="65" y="25" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="22" fill="#059669">TRIP 45</text>
+                <text x="65" y="42" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="14" fill="#0f172a">to DIENG</text>
+            </svg>
+        </a>
+        
+        <!-- Toggle Button untuk Layar Kecil -->
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+
+        <ul class="nav-links" id="nav-menu">
+            <li><a href="#beranda" class="active">Beranda</a></li>
+            <li><a href="#info">Info Penting</a></li>
+            <li><a href="#rundown">Rundown</a></li>
+            <li><a href="#armada">Transportasi</a></li>
+            <li><a href="#destinasi">Destinasi</a></li>
+            <li><a href="#rundown" class="btn-nav">Jadwal Perjalanan</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="beranda">
+        <div class="hero-tags">
+            <div class="hero-tag"><i class="fa-regular fa-calendar-check"></i> 17-19 April 2026</div>
+            <!-- WIDGET CUACA (Simulasi Suhu Dieng) -->
+            <div class="hero-tag weather-badge"><i class="fa-solid fa-temperature-low"></i> Dieng: 10°C - 15°C (Sangat Dingin)</div>
+        </div>
+        <h1 class="hero-title">Buku Saku Perjalanan</h1>
+        <p class="hero-subtitle">Pedoman digital resmi Trip & Capacity Building keluarga besar Bapak/Ibu Guru dan Tenaga Pendidik SMAN 45 Jakarta ke Dataran Tinggi Dieng.</p>
+        <a href="#info" class="nav-links btn-nav" style="text-decoration: none; display: inline-block;">Baca Persiapan Wajib</a>
+    </section>
+
+    <!-- INFO PENTING (BARANG BAWAAN & TATA TERTIB) -->
+    <section id="info">
+        <div class="section-header">
+            <h2>Persiapan & Tata Tertib</h2>
+            <p>Mohon dibaca dengan saksama agar perjalanan kita aman, nyaman, dan menyenangkan.</p>
+        </div>
+        
+        <div class="info-grid">
+            <!-- Checklist Barang -->
+            <div class="info-box">
+                <h3><i class="fa-solid fa-suitcase-rolling"></i> Checklist Bawaan Wajib</h3>
+                <p style="margin-bottom: 20px; color: #cbd5e1; font-size: 15px;">Centang barang yang sudah masuk koper dan kirim konfirmasi ke panitia:</p>
+                
+                <form id="checklistForm">
+                    <input type="text" id="namaChecklist" placeholder="Nama Lengkap Anda..." required class="form-input">
+                    <div class="checklist-grid">
+                        <label class="checklist-item">
+                            <input type="checkbox" name="item_bawaan" value="Jaket Tebal">
+                            <i class="fa-solid fa-shirt"></i>
+                            <span>Jaket Tebal</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox" name="item_bawaan" value="Sarung Tangan & Kupluk">
+                            <i class="fa-solid fa-mitten"></i>
+                            <span>Sarung Tangan & Kupluk</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox" name="item_bawaan" value="Obat Pribadi">
+                            <i class="fa-solid fa-pills"></i>
+                            <span>Obat Pribadi</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox" name="item_bawaan" value="Payung / Jas Hujan">
+                            <i class="fa-solid fa-umbrella"></i>
+                            <span>Payung / Jas Hujan</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox" name="item_bawaan" value="Sandal Homestay">
+                            <i class="fa-solid fa-shoe-prints"></i>
+                            <span>Sandal Homestay</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox" name="item_bawaan" value="Powerbank">
+                            <i class="fa-solid fa-plug"></i>
+                            <span>Powerbank / Charger</span>
+                        </label>
+                    </div>
+                    <button type="submit" id="btnSubmitChecklist" class="plot-btn" style="margin-top: 20px; width: 100%; border:none; background: var(--primary); color: white; cursor: pointer;">
+                        <i class="fa-solid fa-paper-plane"></i> Kirim Konfirmasi
+                    </button>
+                    <p id="checklistStatus" style="display:none; margin-top:15px; font-size:14px; text-align:center; font-weight: 600; line-height: 1.4;"></p>
+                </form>
+            </div>
+
+            <!-- Aturan / Do's & Don'ts -->
+            <div class="info-box">
+                <h3><i class="fa-solid fa-clipboard-list"></i> Tata Tertib Bersama</h3>
+                <ul class="rules-list">
+                    <li>
+                        <i class="fa-regular fa-clock"></i>
+                        <div><strong>Toleransi Keterlambatan:</strong> Dimohon selalu *on time* berkumpul sesuai rundown agar rute dan jadwal istirahat kita tidak terganggu.</div>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-house-user"></i>
+                        <div><strong>Etika Homestay:</strong> Menjaga ketenangan di jam istirahat malam hari demi kenyamanan rekan-rekan guru lainnya di kamar sebelah.</div>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <div><strong>Batas Bagasi:</strong> Bijak dalam berbelanja oleh-oleh agar bagasi bus tidak kelebihan muatan (overload).</div>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-leaf"></i>
+                        <div><strong>Kebersihan:</strong> Selalu membuang sampah pada tempatnya, baik di dalam bus, homestay, maupun area wisata.</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- DATA PLOTTING SECTION -->
+    <section id="plotting" style="padding-bottom: 20px; background-color: var(--bg-light);">
+        <div class="section-header" style="margin-bottom: 40px;">
+            <h2>Cek Data Keberangkatan</h2>
+            <p>Ketik nama Anda di bawah ini untuk melihat posisi kursi bus dan teman sekamar secara otomatis.</p>
+        </div>
+        
+        <!-- Fitur Pencarian Pintar -->
+        <div class="search-container">
+            <div class="search-input-wrapper">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Ketik nama Bapak/Ibu... (Contoh: Budi)" onkeyup="cariPeserta()">
+            </div>
+            <div id="searchResult" class="search-results"></div>
+        </div>
+
+        <p style="text-align: center; color: var(--text-light); font-size: 14px; margin-bottom: 15px;">Atau lihat seluruh data dalam format tabel:</p>
+        
+        <div class="plot-container">
+            <button onclick="bukaTabel('kursi')" class="plot-btn" style="cursor: pointer; width: 100%;">
+                <i class="fa-solid fa-bus-simple" style="color: var(--primary);"></i> Full Tabel Kursi
+            </button>
+            <button onclick="bukaTabel('kamar')" class="plot-btn" style="cursor: pointer; width: 100%;">
+                <i class="fa-solid fa-bed" style="color: var(--primary);"></i> Full Tabel Kamar
+            </button>
+        </div>
+    </section>
+
+    <!-- RUNDOWN SECTION -->
+    <section id="rundown" style="padding-top: 40px; background-color: var(--bg-light);">
+        <div class="section-header">
+            <h2>Jadwal Kegiatan (Rundown)</h2>
+            <p>Jadwal detail perjalanan selama 3 Hari 2 Malam.</p>
+        </div>
+
+        <div class="tabs-container">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="openTab(event, 'day1')">Day 1 (Jum'at)</button>
+                <button class="tab-btn" onclick="openTab(event, 'day2')">Day 2 (Sabtu)</button>
+                <button class="tab-btn" onclick="openTab(event, 'day3')">Day 3 (Minggu)</button>
+            </div>
+
+            <!-- Content Day 1 -->
+            <div id="day1" class="tab-content active">
+                <ul class="timeline">
+                    <li>
+                        <span class="time-badge">Menyesuaikan</span>
+                        <div class="timeline-desc"><strong>Berangkat dari Meeting Point</strong><br>Kumpul di SMA 45 Kelapa Gading Jakarta Utara. Mohon tepat waktu.</div>
+                    </li>
+                    <li>
+                        <span class="time-badge">17.00 - 00.00</span>
+                        <div class="timeline-desc"><strong>Makan Malam & Perjalanan</strong><br>Makan malam di Resto Rosin Subang, dilanjutkan istirahat malam di bus menuju Wonosobo.</div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Content Day 2 -->
+            <div id="day2" class="tab-content">
+                <ul class="timeline">
+                    <li>
+                        <span class="time-badge">06.00</span>
+                        <div class="timeline-desc">Sampai di Parkiran Bus Kalianget, Wonosobo.</div>
+                    </li>
+                    <li>
+                        <span class="time-badge">06.00 - 08.30</span>
+                        <div class="timeline-desc">Perjalanan naik ke Dataran Tinggi Dieng menggunakan Micro Bus dan Sarapan Pagi.</div>
+                    </li>
+                    <li>
+                        <span class="time-badge">08.30 - 12.30</span>
+                        <div class="timeline-desc"><strong>Explore Dieng with Jeep</strong><br>Mengunjungi Curug Sikarim, Swiss Van Java, Kebun Teh Panama, dan Telaga Menjer.</div>
+                    </li>
+                    <li>
+                        <span class="time-badge">12.30 - 14.30</span>
+                        <div class="timeline-desc">Check In Homestay, Istirahat, Sholat, dan Makan Siang.</div>
+                    </li>
+                    <li>
+                        <span class="time-badge">14.30 - 16.30</span>
+                        <div class="timeline-desc">Explore Komplek Candi Arjuna.</div>
+                    </li>
+                    <li>
+                        <span class="time-badge">18.30 - 21.00</span>
+                        <div class="timeline-desc">Acara Makan Malam Bersama, dilanjutkan Waktu Bebas & Istirahat.</div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Content Day 3 -->
+            <div id="day3" class="tab-content">
+                <ul class="timeline">
+                    <li>
+                        <span class="time-badge">06.30 - 07.30</span>
+                        <div class="timeline-desc">Sarapan Pagi di Homestay.</div>
+                    </li>
+                    <li>
+                        <span class="time-badge">07.30 - 09.30</span>
+                        <div class="timeline-desc">Waktu Bebas & Hunting Oleh-oleh khas Dieng.</div>
+                    </li>
+                    <li>
+                        <span class="time-badge">09.30 - 11.00</span>
+                        <div class="timeline-desc">Persiapan Check Out dan perjalanan turun menuju Bus Utama di Kalianget.</div>
+                    </li>
+                    <li>
+                        <span class="time-badge">11.00 - 23.00</span>
+                        <div class="timeline-desc"><strong>Perjalanan Pulang ke Jakarta</strong><br>Makan siang di Resto ASS Purbalingga - Jawa Tengah, dilanjutkan perjalanan kembali ke SMAN 45.</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ARMADA SECTION -->
+    <section id="armada">
+        <div class="section-header">
+            <h2>Armada & Transportasi</h2>
+            <p>Armada eksklusif untuk menjamin kenyamanan istirahat Bapak/Ibu di jalan.</p>
+        </div>
+        <div class="armada-grid">
+            <div class="armada-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=800" alt="Bus Pariwisata Eksekutif">
+            </div>
+            <div class="armada-content">
+                <h3>PT. Umrindo Prima Trans</h3>
+                <p>Dilayani dengan armada kelas premium <strong>"Black Kingfisher"</strong>, dirancang khusus untuk perjalanan wisata jarak jauh yang nyaman menembus perbukitan Dieng.</p>
+                
+                <ul class="specs-list">
+                    <li><i class="fa-solid fa-bus"></i> <div><strong>Jetbus 5 SHD</strong><br><small>Sasis Hino RM280 dengan ABS Air Suspension</small></div></li>
+                    <li><i class="fa-solid fa-chair"></i> <div><strong>50 Seat Konfigurasi 2-2</strong><br><small>Kursi premium by Rimba Kencana</small></div></li>
+                    <li><i class="fa-solid fa-snowflake"></i> <div><strong>Kenyamanan Ekstra</strong><br><small>Full AC, Bantal, Selimut, dan Dispenser</small></div></li>
+                    <li><i class="fa-solid fa-tv"></i> <div><strong>Hiburan Terpadu</strong><br><small>Smart TV Android, Mic Wireless, & USB Charger tiap kursi</small></div></li>
+                </ul>
+                <!-- Tautan Google Drive ke Denah Asli -->
+                <a id="btn-denah" href="https://lh3.googleusercontent.com/d/1L6uSTav0Z4beapF2QrTteQGYd99ziz0Y" target="_blank" class="btn-nav" style="margin-top: 25px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:8px; text-decoration: none;">
+                    <i class="fa-solid fa-image"></i> Lihat Bentuk Denah Kursi
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- DESTINASI SECTION -->
+    <section id="destinasi" style="background-color: var(--bg-light);">
+        <div class="section-header">
+            <h2>Katalog Destinasi</h2>
+            <p>Spot-spot cantik untuk melepas penat dan berswafoto bersama rekan-rekan.</p>
+        </div>
+        <div class="destinasi-grid">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1596404746654-734d0dfefd78?auto=format&fit=crop&q=80&w=800" onerror="this.src='https://travelspromo.com/wp-content/uploads/2021/11/penampakan-bangunan-candi-di-komplek-wisata-Candi-Arjuna-e1638334989524.jpg'" alt="Candi Arjuna">
+                <div class="card-content">
+                    <h4>Komplek Candi Arjuna</h4>
+                    <p>Situs purbakala Hindu tertua di Pulau Jawa yang terletak di hamparan lembah hijau.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1506501139174-099022df5220?auto=format&fit=crop&q=80&w=800" onerror="this.src='https://static.promediateknologi.id/crop/0x378:1080x1102/1200x800/webp/photo/p1/192/2024/05/30/Snapinstaapp_431883793_18298613440152515_505012760394292864_n_1080-489215578.jpg'" alt="Telaga Menjer">
+                <div class="card-content">
+                    <h4>Telaga Menjer</h4>
+                    <p>Danau vulkanik terdalam di kawasan pegunungan Dieng dengan suasana yang tenang.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://nnc-media.netralnews.com/2025/05/IMG-Netral-News-User-11902-OE53JYUVC0.jpg" onerror="this.src='https://placehold.co/800x500/0f172a/ffffff?text=Lanskap+Dieng'" alt="Lanskap Dieng">
+                <div class="card-content">
+                    <h4>Swiss Van Java</h4>
+                    <p>Menikmati lanskap dataran tinggi yang menyerupai keindahan perbukitan di Eropa.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://awsimages.detik.net.id/community/media/visual/2023/01/12/wisata-air-terjun-sikarim-dieng_169.jpeg?w=1200" onerror="this.src='https://placehold.co/800x500/0f172a/ffffff?text=Curug+Sikarim'" alt="Curug Sikarim">
+                <div class="card-content">
+                    <h4>Curug Sikarim</h4>
+                    <p>Air terjun alami dengan rute perjalanan menantang namun menyuguhkan panorama luar biasa.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://www.jogjasuper.co.id/wp-content/uploads/2025/07/liburan-Kebun-Teh-Panama.jpg" onerror="this.src='https://placehold.co/800x500/0f172a/ffffff?text=Kebun+Teh+Panama'" alt="Kebun Teh Panama">
+                <div class="card-content">
+                    <h4>Kebun Teh Panama</h4>
+                    <p>Hamparan kebun teh yang sejuk dan menenangkan, cocok untuk refreshing dan bersantai.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://scontent.fcgk6-2.fna.fbcdn.net/v/t39.30808-6/652905062_10228043282902113_5990556386106627597_n.jpg?stp=dst-jpg_p843x403_tt6&_nc_cat=108&ccb=1-7&_nc_sid=13d280&_nc_ohc=VTiB7CqM4CwQ7kNvwGnIsR4&_nc_oc=Adrc7qZ0Zc4UnIPLbg0hf3wB21XNdLi05YRB4DCrF3EmOm7Cl8nqNZKmD3-xxlZAE7M&_nc_zt=23&_nc_ht=scontent.fcgk6-2.fna&_nc_gid=fy6ewqSfI353kqBkIwS3YQ&_nc_ss=7a389&oh=00_Af1SAseT4tu3d6TdLny928s4WOi7n5KwaPgE3w38sZ5TJQ&oe=69D93AB9" alt="Titik 0 Dieng">
+                <div class="card-content">
+                    <h4>Titik 0 Dieng</h4>
+                    <p>Spot foto ikonik sebagai penanda dan bukti kenangan kunjungan ke Dataran Tinggi Dieng.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FASILITAS SECTION -->
+    <section id="fasilitas">
+        <div class="section-header">
+            <h2>Biaya & Fasilitas</h2>
+            <p>Informasi transparansi pembiayaan <strong>Rp. 1.050.000 / PAX</strong>.</p>
+        </div>
+        
+        <div class="fasilitas-grid">
+            <div class="box box-include">
+                <h3><i class="fa-solid fa-circle-check"></i> Termasuk (Include)</h3>
+                <ul class="check-list">
+                    <li><i class="fa-solid fa-check-circle"></i> Transportasi Big Bus 50 Seat</li>
+                    <li><i class="fa-solid fa-check-circle"></i> Penginapan Homestay (3 org/kamar)</li>
+                    <li><i class="fa-solid fa-check-circle"></i> Konsumsi 6x Makan Besar</li>
+                    <li><i class="fa-solid fa-check-circle"></i> Snack Perjalanan 1x</li>
+                    <li><i class="fa-solid fa-check-circle"></i> Tiket Masuk Semua Obyek Wisata</li>
+                    <li><i class="fa-solid fa-check-circle"></i> Biaya Sewa Jeep Explore Dieng</li>
+                    <li><i class="fa-solid fa-check-circle"></i> Dokumentasi Foto & Video</li>
+                    <li><i class="fa-solid fa-check-circle"></i> Fasilitas Homestay (Water heater, Dapur)</li>
+                </ul>
+            </div>
+            <div class="box box-exclude">
+                <h3><i class="fa-solid fa-circle-xmark"></i> Tidak Termasuk</h3>
+                <ul class="check-list">
+                    <li><i class="fa-solid fa-times-circle"></i> Pengeluaran Pribadi</li>
+                    <li><i class="fa-solid fa-times-circle"></i> Obat-obatan khusus</li>
+                    <li><i class="fa-solid fa-times-circle"></i> Belanja Oleh-oleh</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- FLOATING WA BUTTON (DARURAT) -->
+    <a href="https://wa.me/6282342107392?text=Halo%20Panitia%20Trip%20Dieng,%20saya%20butuh%20bantuan..." target="_blank" class="wa-float">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span>Kontak Panitia</span>
+    </a>
+
+    <!-- MODAL TABEL DATA -->
+    <div id="tabelModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="tutupTabel()"><i class="fa-solid fa-xmark"></i></span>
+            <h3 id="modalTitle" style="color: var(--secondary); margin-bottom: 15px; font-size: 24px;">Judul Tabel</h3>
+            <div style="overflow-x: auto; max-height: 50vh;">
+                <table class="data-table" id="modalTable">
+                    <!-- Isi tabel akan dimuat otomatis oleh JavaScript -->
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <h3>Panitia Trip Dieng SMAN 45 Jakarta</h3>
+        <p style="margin-top: 10px; color: #94a3b8; font-size: 14px;">Buku Saku Digital &copy; 2026. Digunakan sebagai pedoman peserta selama perjalanan.</p>
+    </footer>
+
+    <!-- INTERACTIVE SCRIPTS -->
+    <script>
+        // --- 1. JS Untuk Tab Rundown ---
+        function openTab(evt, dayName) {
+            var i, tabcontent, tablinks;
+            
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+            
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            
+            document.getElementById(dayName).style.display = "block";
+            
+            setTimeout(() => {
+                document.getElementById(dayName).classList.add("active");
+            }, 10);
+            
+            evt.currentTarget.classList.add("active");
+        }
+
+        // --- 2. JS Untuk Mobile Menu Toggle ---
+        const mobileMenuBtn = document.getElementById('mobile-menu');
+        const navMenu = document.getElementById('nav-menu');
+        const navItems = document.querySelectorAll('.nav-links a');
+        const icon = mobileMenuBtn.querySelector('i');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('nav-active');
+            
+            if (navMenu.classList.contains('nav-active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (navMenu.classList.contains('nav-active')) {
+                    navMenu.classList.remove('nav-active');
+                    icon.classList.remove('fa-xmark');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        });
+
+        // --- 3. JS Untuk Scroll Spy (Highlighter Menu Aktif) ---
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-links a:not(.btn-nav)');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= (sectionTop - 150)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // --- 4. JS UNTUK MINI DATABASE (TERINTEGRASI GOOGLE SHEETS) ---
+        
+        // PANITIA: Masukkan ID Google Spreadsheet Anda di sini!
+        // (ID adalah teks panjang acak di URL Sheet Anda, contoh: 1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms)
+        const sheetID = '1vPNVUGM3mBn2_V6Zj8y-FwpMM5bMenV4Fp5myCjh9QA'; 
+        
+        // Data default (Fallback) jika Spreadsheet belum dipasang
+        let dbPeserta = [
+            { nama: "Iman", kursi: "01", kamar: "Kamar A1", sekamar: "Dhani, Taufik" },
+            { nama: "Melda", kursi: "05", kamar: "Kamar B2", sekamar: "Heni Arta, Fera" },
+            { nama: "Dhani", kursi: "02", kamar: "Kamar A1", sekamar: "Iman, Taufik" },
+            { nama: "Heni", kursi: "06", kamar: "Kamar B2", sekamar: "Melda, Fera" },
+            { nama: "Taufik", kursi: "03", kamar: "Kamar A1", sekamar: "Iman, Dhani" },
+            { nama: "Fera", kursi: "07", kamar: "Kamar B2", sekamar: "Melda, Heni Arta" }
+        ];
+
+        // Fungsi Load Data Langsung dari Google Sheets secara otomatis!
+        async function muatDataSpreadsheet() {
+            if(!sheetID || sheetID === '') return; // Skip jika belum diisi
+
+            // Gunakan endpoint ekspor CSV dari Google Sheets (Pastikan setting sharing: "Anyone with the link")
+            const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetID}/export?format=csv`;
+            
+            try {
+                const response = await fetch(csvUrl);
+                if (!response.ok) throw new Error("Gagal memuat Sheets");
+                
+                const text = await response.text();
+                const rows = text.split('\n');
+                
+                if (rows.length > 1) {
+                    let dataBaru = [];
+                    // Mulai dari i=1 untuk mengabaikan Header di baris pertama
+                    for (let i = 1; i < rows.length; i++) {
+                        // Pisahkan kolom berbasis koma
+                        const cols = rows[i].split(',').map(item => item.replace(/(^"|"$)/g, '').trim());
+                        
+                        if (cols.length >= 4 && cols[0] !== '') {
+                            dataBaru.push({
+                                nama: cols[0],     // Kolom A di Sheets: Nama
+                                kursi: cols[1],    // Kolom B di Sheets: No Kursi
+                                kamar: cols[2],    // Kolom C di Sheets: Nama Kamar
+                                sekamar: cols[3]   // Kolom D di Sheets: Rekan Sekamar
+                            });
+                        }
+                    }
+                    if (dataBaru.length > 0) dbPeserta = dataBaru; // Timpa fallback dengan data asli
+                }
+            } catch (error) {
+                console.log("Menggunakan data lokal. Spreadsheet error:", error);
+            }
+        }
+
+        // Jalankan fetch otomatis saat website dibuka
+        window.addEventListener('DOMContentLoaded', muatDataSpreadsheet);
+
+
+        function cariPeserta() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const resultDiv = document.getElementById('searchResult');
+
+            // Kosongkan hasil jika input kurang dari 2 huruf
+            if(input.length < 2) {
+                resultDiv.innerHTML = '';
+                return;
+            }
+
+            // Filter data peserta berdasarkan ketikan
+            const filtered = dbPeserta.filter(p => p.nama.toLowerCase().includes(input));
+
+            if(filtered.length > 0) {
+                let html = '';
+                filtered.forEach(p => {
+                    html += `
+                    <div class="result-card">
+                        <h3 style="color: var(--secondary); margin-bottom: 15px; font-size: 18px;"><i class="fa-solid fa-user-check" style="color: var(--primary); margin-right: 8px;"></i> ${p.nama}</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                                <div style="font-size: 11px; color: var(--text-light); font-weight: 800; letter-spacing: 1px; margin-bottom: 5px;">POSISI BUS</div>
+                                <div style="font-size: 16px; color: var(--primary-dark); font-weight: 800;"><i class="fa-solid fa-chair"></i> Kursi No. ${p.kursi}</div>
+                            </div>
+                            <div style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                                <div style="font-size: 11px; color: var(--text-light); font-weight: 800; letter-spacing: 1px; margin-bottom: 5px;">HOMESTAY</div>
+                                <div style="font-size: 16px; color: var(--primary-dark); font-weight: 800;"><i class="fa-solid fa-door-closed"></i> ${p.kamar}</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px; font-size: 14px; color: var(--text-light); background: #f1f5f9; padding: 10px 15px; border-radius: 8px;">
+                            <strong><i class="fa-solid fa-user-group" style="color: var(--primary); margin-right: 5px;"></i> Rekan Sekamar:</strong> ${p.sekamar}
+                        </div>
+                    </div>
+                    `;
+                });
+                resultDiv.innerHTML = html;
+            } else {
+                resultDiv.innerHTML = `<div class="result-card" style="text-align:center; color: #dc2626; border-left-color: #dc2626;"><i class="fa-solid fa-circle-exclamation"></i> Data tidak ditemukan. Coba ketik nama panggilan Anda.</div>`;
+            }
+        }
+
+        // Fungsi Buka Tabel Data (Kursi & Kamar)
+        function bukaTabel(jenis) {
+            const modal = document.getElementById('tabelModal');
+            const title = document.getElementById('modalTitle');
+            const table = document.getElementById('modalTable');
+            let html = '';
+
+            // Duplikasi array agar data asli tidak rusak saat diurutkan
+            let dataList = [...dbPeserta]; 
+
+            if(jenis === 'kursi') {
+                title.innerHTML = '<i class="fa-solid fa-bus-simple" style="color: var(--primary);"></i> Daftar Penumpang Bus';
+                // Urutkan dari kursi no 1 sampai seterusnya
+                dataList.sort((a, b) => parseInt(a.kursi) - parseInt(b.kursi));
+                
+                html = `<thead><tr><th style="width: 30%;">No. Kursi</th><th>Nama Peserta</th></tr></thead><tbody>`;
+                dataList.forEach(p => {
+                    html += `<tr><td><strong style="color: var(--primary-dark); font-size: 16px;">${p.kursi}</strong></td><td>${p.nama}</td></tr>`;
+                });
+                html += `</tbody>`;
+            } else if(jenis === 'kamar') {
+                title.innerHTML = '<i class="fa-solid fa-bed" style="color: var(--primary);"></i> Pembagian Kamar';
+                // Urutkan berdasarkan nama/kode kamar
+                dataList.sort((a, b) => a.kamar.localeCompare(b.kamar));
+                
+                html = `<thead><tr><th style="width: 40%;">Nama Kamar</th><th>Nama Peserta</th></tr></thead><tbody>`;
+                dataList.forEach(p => {
+                    html += `<tr><td><strong style="color: var(--primary-dark);">${p.kamar}</strong></td><td>${p.nama}</td></tr>`;
+                });
+                html += `</tbody>`;
+            }
+
+            table.innerHTML = html;
+            modal.classList.add('show');
+        }
+
+        function tutupTabel() {
+            document.getElementById('tabelModal').classList.remove('show');
+        }
+
+        // Tutup modal jika peserta mengklik area di luar kotak
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('tabelModal');
+            if (e.target === modal) {
+                tutupTabel();
+            }
+        });
+
+        // --- 5. JS UNTUK FORM CHECKLIST (GOOGLE APPS SCRIPT) ---
+        
+        // PANITIA: Masukkan URL Web App Google Apps Script Anda di sini!
+        const gasURL = 'https://script.google.com/macros/s/AKfycbz9CXTZgTVi8gCFMNPwG2S2ONmmGyaJaNdO92h3cIpDkpL6Y5hEahEgaqqHSpXZj4UFuQ/exec';
+
+        document.getElementById('checklistForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('btnSubmitChecklist');
+            const status = document.getElementById('checklistStatus');
+            const nama = document.getElementById('namaChecklist').value;
+            
+            // Ambil semua barang yang dicentang
+            const checkboxes = document.querySelectorAll('input[name="item_bawaan"]:checked');
+            let itemsArray = [];
+            checkboxes.forEach((cb) => { itemsArray.push(cb.value); });
+            
+            if (itemsArray.length === 0) {
+                status.style.display = 'block';
+                status.style.color = '#fbbf24';
+                status.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Mohon centang minimal 1 barang bawaan!';
+                return;
+            }
+
+            const itemsStr = itemsArray.join(', ');
+
+            // UI Loading state
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
+            btn.disabled = true;
+
+            // Kumpulkan data ke FormData
+            const formData = new FormData();
+            formData.append('nama', nama);
+            formData.append('barang', itemsStr);
+            formData.append('waktu', new Date().toLocaleString('id-ID'));
+
+            // Fitur simulasi sukses (jika Anda belum memasukkan link GAS)
+            if(gasURL === 'GANTI_DENGAN_URL_WEB_APP_GAS_ANDA') {
+                setTimeout(() => {
+                    status.style.display = 'block';
+                    status.style.color = '#10b981';
+                    status.innerHTML = `<i class="fa-solid fa-circle-check"></i> (Simulasi) Data Bapak/Ibu ${nama} berhasil terekam!<br><small style="color: #cbd5e1; font-weight: 400;">*Status Simulasi: Link GAS Panitia belum diatur.</small>`;
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Terkirim';
+                    btn.disabled = false;
+                }, 1500);
+                return;
+            }
+
+            // Pengiriman sesungguhnya ke Google Sheet (via GAS)
+            fetch(gasURL, { method: 'POST', body: formData })
+                .then(response => {
+                    status.style.display = 'block';
+                    status.style.color = '#10b981';
+                    status.innerHTML = '<i class="fa-solid fa-circle-check"></i> Konfirmasi berhasil masuk ke server Panitia!';
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Terkirim';
+                    
+                    document.getElementById('checklistForm').reset(); // Kosongkan form
+                    
+                    // Kembalikan tombol setelah 3 detik
+                    setTimeout(() => { 
+                        btn.disabled = false; 
+                        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kirim Konfirmasi'; 
+                    }, 3000);
+                })
+                .catch(error => {
+                    status.style.display = 'block';
+                    status.style.color = '#dc2626';
+                    status.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Gagal mengirim data. Periksa koneksi internet Anda.';
+                    btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kirim Konfirmasi';
+                    btn.disabled = false;
+                });
+        });
+
+    </script>
+</body>
+</html>
